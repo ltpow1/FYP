@@ -8,13 +8,11 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear;close all; clc; rng('shuffle');
-
-[H, G, n, k] = hammgen(5);
+t = 2;
+m = 4;
+[H, G, n, k] = goppagen(t,m);
 G_gf = gf(G);
 H_gf = gf(H);
-% n = 7; % total number of bits in linear code; dimension of S
-% k = 4; % number of data bits; dimension of P
- t = 1; % maximum error correcting ability of code
 l = 10; % length of seed (in bits) max atm is 31, limitation of rng
 seed_binary = randi([0 1],1,l);
 seed = bi2de(seed_binary);
@@ -37,7 +35,7 @@ m = randi([0 1],1,k); % generate random message of length k
 m_gf = gf(m);
 
 z = zeros(1,n);
-z(randperm(numel(z), t)) = 1;
+z(randperm(numel(z), t)) = 1; % generate random error of weight t
 z_gf = gf(z);
 
 c_gf = m_gf*G_hat+z_gf;
@@ -45,9 +43,6 @@ c_gf = m_gf*G_hat+z_gf;
 %% decryption
 
 c_hat = c_gf*P';
-mS = decode(double(c_hat.x), n,k,'hamming');
 
-decoded_m = gf(mS)*S_inv_gf;
 
 %% results
-m==decoded_m
