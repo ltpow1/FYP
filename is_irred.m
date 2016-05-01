@@ -1,7 +1,8 @@
-function [result] = is_irred(P,m,t)
+function [result] = is_irred(P,m)
 % test polynomial P over the field F 2^m for irreducibility.
 % output result = 1 if true, 0 otherwise
 % t is the degree of the polynomial P
+t = length(P)-1;
 P_gf = gf(P,m);
 h = zeros(1,t+1);
 h(t) = 1;
@@ -22,3 +23,6 @@ end
 
 
 end
+% alternative method to consider:
+% once support generated, check that polynomial has no zeros
+% according to foundations of coding, this makes the poly irreducible

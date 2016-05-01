@@ -13,6 +13,14 @@ while any(b)
     while (b(1)==0)
         b = b(2:length(b));
     end
+    % check for scalar factors and remove
+    if(all(a==a(1)))
+        a = a/a(1);
+    end
+    
+    if(all(b==b(1)))
+        b = b/b(1);
+    end
     
     [quo, remain] = deconv(a,b);
     a = b;
