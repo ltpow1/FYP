@@ -1,4 +1,4 @@
-function [H,G,n,k] = goppagen(t,m)
+function [H,G,n,k,g,L] = goppagen(t,m)
 % GOPPA_GENERATOR   generate a goppa code
 %   H = Parity check matrix
 %   G = generator matrix

@@ -6,12 +6,14 @@ a = P1;
 b = P2;
 
 while any(b)
+    % conv requires removal of leaing zeros
     while(a(1)==0)
         a = a(2:length(a));
     end
     while (b(1)==0)
         b = b(2:length(b));
     end
+    
     [quo, remain] = deconv(a,b);
     a = b;
     b = remain;

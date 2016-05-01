@@ -8,9 +8,9 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear;close all; clc; rng('shuffle');
-t = 2;
-m = 4;
-[H, G, n, k] = goppagen(t,m);
+t = 3;
+m = 5;
+[H, G, n, k,g,L] = goppagen(t,m);
 G_gf = gf(G);
 H_gf = gf(H);
 l = 10; % length of seed (in bits) max atm is 31, limitation of rng
@@ -31,14 +31,14 @@ G_hat = S_gf*G_gf*P_gf;
 % public key is G_hat, t
 
 %% encryption
-m = randi([0 1],1,k); % generate random message of length k
-m_gf = gf(m);
+message = randi([0 1],1,k); % generate random message of length k
+message_gf = gf(message);
 
 z = zeros(1,n);
 z(randperm(numel(z), t)) = 1; % generate random error of weight t
 z_gf = gf(z);
 
-c_gf = m_gf*G_hat+z_gf;
+c_gf = message_gf*G_hat+z_gf;
 
 %% decryption
 
