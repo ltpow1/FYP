@@ -31,6 +31,10 @@ gfsynd = gf(gfsynd,m);
 [d,T,v] = extended_euclid(gfsynd, g,m);
 % note: d should be 1 if g is irreducible
 
+Tx = T;
+Tx(length(Tx)-1) = Tx(length(Tx)-1)+1;
+
+R = poly_root(Tx,g,m);
 
 
 

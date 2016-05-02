@@ -20,10 +20,10 @@ b = P2;
 
 while any(b)
     % conv requires removal of leaing zeros
-    while(a(1)==0)
+    while (a(1)==0)&&(length(a)>1)
         a = a(2:length(a));
     end
-    while (b(1)==0)
+    while (b(1)==0)&&(length(a)>1)
         b = b(2:length(b));
     end
     
