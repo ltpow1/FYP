@@ -1,7 +1,7 @@
 % Goppa Encoding and decoding test using yi hongs suggested goppa polynomial
 clear; close all; clc;
 t = 2;
-m = 4;
+m = 3;
 n = 2^m;
 alpha = gf(2,m);
 beta = gf(1,m);

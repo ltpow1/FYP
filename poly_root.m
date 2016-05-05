@@ -4,6 +4,17 @@ function [R] = poly_root(T,g,m)
 [g0,g1] = poly_split(g,m);
 [T0, T1] = poly_split(T,m);
 [~,u,~] = extended_euclid(g1,g,m);
-R = T0 + conv(conv(g0,u),T1);
+[~,r] = deconv(conv(g0,u),g);
+temp = conv(r,T1);
+
+% need temp to be the same length as T0
+
+    if length(temp)>length(T0)
+        R = [zeros(1,length(temp)-length(T0)),T0]+temp;
+    else
+        R = T0+temp;
+    end
+    
+
 
 end

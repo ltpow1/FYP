@@ -21,21 +21,47 @@ encoded_mess_w_err = encoded_mess + z_gf;
 synd = encoded_mess_w_err*H';
 synd_array = synd.x;
 %convert synd from GF(2) to GF(2^m)
-for i = 1:m
+for i = 1:t
     gfsynd(i) = bi2de(synd_array(((i-1)*m+1):(i*m)),'left-msb');
 end
 gfsynd = gf(gfsynd,m);
-
 % now follow the steps of the patterson algorithm
 % first, we need the inverse of the syndrome mod g
-[d,T,v] = extended_euclid(gfsynd, g,m);
+[~,T,~] = extended_euclid(gfsynd,g,m);
 % note: d should be 1 if g is irreducible
 
-Tx = T;
-Tx(length(Tx)-1) = Tx(length(Tx)-1)+1;
+% add x to T
+Tx = fliplr(T);
+if length(Tx)>=2
+    Tx(2) = Tx(2)+1;
+else
+    Tx(2) = 1;
+end
+Tx = fliplr(Tx);
 
+% R = sqrt(T+x) mod g
 R = poly_root(Tx,g,m);
 
+[gcd,u,v] = extended_euclid(g, R, m);
 
+first_term = conv(gcd,gcd);
+second_term = conv(gf([1 0],m),conv(v,v));
+% need these terms to be the same length for addition
+first_term = [zeros(1,length(second_term)-length(first_term)),first_term];
+second_term = [zeros(1,length(first_term)-length(second_term)),second_term];
+sigma = first_term+second_term;
 
+error_roots = roots(sigma)
 
+for i = 1:length(error_roots)
+    error_index(i) = find(L==error_roots(i));
+end
+
+if (length(error_roots)>=1)
+    decoded_error = zeros(1,n);
+    for j = 1:length(error_index)
+        decoded_error(error_index(j)) = 1;
+    end
+    
+    z==decoded_error
+end

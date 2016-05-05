@@ -1,5 +1,6 @@
- function [gcd,u,v] = extended_euclid(P1,P2,m)
+function [gcd,u,v] = extended_euclid(P1,P2,m)
 % [gcd,u,v] = extended_euclid(P1,P2,m)
+% solves bezouts identity uP1 + vP2 = gcd
 % can be used to find the multiplicative inverse of P1 mod P2, given by
 % u. Also produces the gcd of P1 and P2. Applies over GF(m)
 % see bezouts identity and the wiki page for extended euclid algorithm
@@ -16,9 +17,12 @@ t1 = gf(1,m);
 
 a = P1;
 b = P2;
-
+iter = 0;
 
 while any(b)
+    
+    iter = iter+1;
+    
     % conv requires removal of leaing zeros
     while (a(1)==0)&&(length(a)>1)
         a = a(2:length(a));
@@ -26,6 +30,8 @@ while any(b)
     while (b(1)==0)&&(length(a)>1)
         b = b(2:length(b));
     end
+    
+    
     
     [q,newb] = deconv(a,b);
     temps = conv(q,s1);
@@ -53,9 +59,21 @@ while any(b)
     
     t0 = t1;
     t1 = newt;
+    
+    % check for scalar factors and remove
+    if(all(a==a(1)))&&(a(1)~=0)
+        s0 = s0/a(1);
+        t0 = t0/a(1);
+        a = a/a(1);
+    end
+    
+    
+    
+    
 end
 gcd = a;
 u = s0;
 v = t0;
 
- end
+
+end
