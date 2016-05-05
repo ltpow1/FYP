@@ -1,23 +1,26 @@
 % trialling pattersons algorithm
 % once working, implement as function to call in cryptosystem
-clear; close all; clc;
-
-t = 2;
-m = 3;
-[H, G, n, k,g,L] = goppagen(t,m);
+function [decoded_mess, decoded_error] = patterson(encoded_mess_w_err,g,G,H,L,m)
+% clear; clc;
+% t = 2;
+% m = 3;
+% [H, G, n, k,g,L] = goppagen(t,m);
 
 % encode a message/ generate error of degree <= t
-z = zeros(1,n);
-z(randperm(numel(z), t)) = 1; % generate random error of weight t
-z_gf = gf(z);
+% z = zeros(1,n);
+% z(randperm(numel(z), t)) = 1; % generate random error of weight t
+% z_gf = gf(z);
 
-mess = randi([0 1],1,k); % generate random message of length k
-mess_gf = gf(mess);
-
-encoded_mess = mess_gf*G;
-encoded_mess_w_err = encoded_mess + z_gf;
+% mess = randi([0 1],1,k); % generate random message of length k
+% mess_gf = gf(mess);
+% 
+% encoded_mess = mess_gf*G;
+% encoded_mess_w_err = encoded_mess + z_gf;
 
 % first, calculate the syndrome
+t = length(g)-1;
+n = 2^m;
+k = n-m*t;
 synd = encoded_mess_w_err*H';
 synd_array = synd.x;
 %convert synd from GF(2) to GF(2^m)
@@ -28,7 +31,7 @@ gfsynd = gf(gfsynd,m);
 % now follow the steps of the patterson algorithm
 % first, we need the inverse of the syndrome mod g
 [~,T,~] = extended_euclid(gfsynd,g,m);
-% note: d should be 1 if g is irreducible
+
 
 % add x to T
 Tx = fliplr(T);
@@ -42,7 +45,7 @@ Tx = fliplr(Tx);
 % R = sqrt(T+x) mod g
 R = poly_root(Tx,g,m);
 
-[gcd,u,v] = extended_euclid(g, R, m);
+[gcd,~,v] = patt_EEA(g, R, m, t);
 
 first_term = conv(gcd,gcd);
 second_term = conv(gf([1 0],m),conv(v,v));
@@ -51,7 +54,7 @@ first_term = [zeros(1,length(second_term)-length(first_term)),first_term];
 second_term = [zeros(1,length(first_term)-length(second_term)),second_term];
 sigma = first_term+second_term;
 
-error_roots = roots(sigma)
+error_roots = roots(sigma);
 
 for i = 1:length(error_roots)
     error_index(i) = find(L==error_roots(i));
@@ -63,5 +66,19 @@ if (length(error_roots)>=1)
         decoded_error(error_index(j)) = 1;
     end
     
-    z==decoded_error
+%      z==decoded_error
+end
+
+decoded_mess = gf(zeros(1,k));
+mess_wout_error = encoded_mess_w_err+decoded_error;
+for i = 1:k
+    check_vector = zeros(k,1);
+    check_vector(i) = 1;
+    for j = 1:n
+        if(all(check_vector==G(:,j)))
+            decoded_mess(i) = mess_wout_error(j);
+        end
+    end
+end
+
 end

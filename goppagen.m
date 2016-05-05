@@ -9,6 +9,7 @@ function [H,G,n,k,g,L] = goppagen(t,m)
 %   G and H will be returned as normal matrices, not GF arrays
 
 n = 2^m;
+k = n-m*t;
 alpha = gf(2,m);
 beta = gf(1,m);
 
@@ -54,7 +55,28 @@ end
 H = double(newH)-48;
 nullspace = null2(H);
 G = nullspace';
-k = size(G,1);
+
+% [H,colswaps] = systematizer(H);
+% G = [H(:,(n-k+1):n)',eye(k)];
+% 
+% 
+% % need to reorder L based on the column swaps done in systematizer
+% for i = 1:size(colswaps,1)
+%     coltemp = 0;
+%     for j = 1:n
+%         if(colswaps(i,j) == 1)
+%             if coltemp == 0
+%                 col1 = j;
+%                 coltemp = 1;
+%             else
+%                 col2 = j;
+%                 L([col1,col2]) = L([col2,col1]);
+%             end
+%         end
+%         
+%     end
+% end
+% k = size(G,1);
 % parity check matrix will not be full rank, and hence will
 % be a bit larger thanthe standard (n-k)xn
 end

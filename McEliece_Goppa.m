@@ -8,8 +8,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear;close all; clc; rng('shuffle');
-t = 3;
-m = 5;
+t = 2;
+m = 3;
 [H, G, n, k,g,L] = goppagen(t,m);
 G_gf = gf(G);
 H_gf = gf(H);
@@ -43,6 +43,9 @@ c_gf = message_gf*G_hat+z_gf;
 %% decryption
 
 c_hat = c_gf*P';
+[m_hat, z_hat] = patterson(c_hat,g,G,H,L,m);
 
+decoded_m = m_hat*S_inv_gf;
 
 %% results
+decoded_m == message
