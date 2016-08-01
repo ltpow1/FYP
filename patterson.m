@@ -1,6 +1,8 @@
 % trialling pattersons algorithm
 % once working, implement as function to call in cryptosystem
-function [decoded_mess, decoded_error] = patterson(encoded_mess_w_err,g,G,H,L,m)
+function [decoded_mess, decoded_error] = patterson(encoded_mess_w_err,g,G,H,L,m, synd)
+
+
 % clear; clc;
 % t = 2;
 % m = 3;
@@ -13,7 +15,7 @@ function [decoded_mess, decoded_error] = patterson(encoded_mess_w_err,g,G,H,L,m)
 
 % mess = randi([0 1],1,k); % generate random message of length k
 % mess_gf = gf(mess);
-% 
+%
 % encoded_mess = mess_gf*G;
 % encoded_mess_w_err = encoded_mess + z_gf;
 
@@ -21,7 +23,11 @@ function [decoded_mess, decoded_error] = patterson(encoded_mess_w_err,g,G,H,L,m)
 t = length(g)-1;
 n = 2^m;
 k = n-m*t;
-synd = encoded_mess_w_err*H';
+
+if nargin == 6
+    synd = encoded_mess_w_err*H';
+end
+
 synd_array = synd.x;
 %convert synd from GF(2) to GF(2^m)
 for i = 1:t
@@ -60,25 +66,29 @@ for i = 1:length(error_roots)
     error_index(i) = find(L==error_roots(i));
 end
 
+decoded_error = zeros(1,n);
+
 if (length(error_roots)>=1)
-    decoded_error = zeros(1,n);
+    
     for j = 1:length(error_index)
         decoded_error(error_index(j)) = 1;
     end
     
-%      z==decoded_error
+    %      z==decoded_error
 end
 
 decoded_mess = gf(zeros(1,k));
-mess_wout_error = encoded_mess_w_err+decoded_error;
-for i = 1:k
-    check_vector = zeros(k,1);
-    check_vector(i) = 1;
-    for j = 1:n
-        if(all(check_vector==G(:,j)))
-            decoded_mess(i) = mess_wout_error(j);
+if nargin == 6
+    
+    mess_wout_error = encoded_mess_w_err+decoded_error;
+    for i = 1:k
+        check_vector = zeros(k,1);
+        check_vector(i) = 1;
+        for j = 1:n
+            if(all(check_vector==G(:,j)))
+                decoded_mess(i) = mess_wout_error(j);
+            end
         end
     end
 end
-
 end

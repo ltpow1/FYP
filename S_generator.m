@@ -1,13 +1,12 @@
-function [S] = S_generator(k,n)
+function [S, S_inv] = S_generator(k,n)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   Algorithms for nonsingular matrix S
-%   
+%   Algorithms for nonsingular matrix S and its inverse S_inv
+%   Algorithms developed by Hung-Min Sun and Tzonelih Hwang
 %
-%
+%   takes an n bit long seed k as input.
 %
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %% ALGORITHM I
 % STEP 1
 
@@ -72,45 +71,46 @@ p = mod(floor(k/n),n)+1;
 q = mod(k,n)+1;
 S(p,q) = mod(S(p,q)+1,2); % could also use S(p,q) = ~S(p,q)
 
-end
 
-% %% ALGORITHM II *needs fixing* *can convert S using gf then use inv instead
+% %% ALGORITHM II *needs fixing* 
 % % Generate the inverse of S
 % % requires R and C
 % % STEP 1
-% j = find(C==q,1);
-% 
-% % STEP 2
-% W = zeros(1,n);
-% L = zeros(1,n);
-% 
-% if(R(j)==p)
-%     for i = 1:n
-%         W(i) = R(mod(j+2*i,2*n)+1);
-%         L(i) = C(mod(j+2*i,2*n)+1);
-%     end
-% else
-%     for i = 1:n
-%         W(i) = R(mod(j+1-2*i,2*n)+1);
-%         L(i) = C(mod(j+1-2*i,2*n)+1);
-%     end
-% end
-% 
-% % STEP 3
-% 
-% m = find(W==p,1);
-% S_inv = zeros(n);
-% S_inv(L(1:m-1),:) = 1;
-% 
-% new_locked_rows = zeros(1,n);
-% 
-% % STEP 4
-% for i = 1:n
-%     temp_col = S_inv(:,W(i));
-%     temp_col(new_locked_rows==1) = ~temp_col(new_locked_rows==1); %invert locked rows twice, thus leaving them where they started
-%     S_inv(:,W(i)) = ~S_inv(:,W(i));
-%     new_locked_rows(L(i)) = 1;
-% end
+ j = find(C==q,1)-1;
+
+% STEP 2
+W = zeros(1,n);
+L = zeros(1,n);
+
+if(R(j+1)==p)
+    for i = 1:n
+        W(i) = R(mod(j+2*i,2*n)+1);
+        L(i) = C(mod(j+2*i,2*n)+1);
+    end
+else
+    for i = 1:n
+        W(i) = R(mod(j+1-2*i,2*n)+1);
+        L(i) = C(mod(j+1-2*i,2*n)+1);
+    end
+end
+
+% STEP 3
+
+m = find(W==p,1);
+S_inv = zeros(n);
+S_inv(L(1:m-1),:) = 1;
+
+new_locked_rows = zeros(1,n);
+
+% STEP 4
+for i = 1:n
+    temp_col = S_inv(:,W(i));
+    temp_col(new_locked_rows==0) = ~temp_col(new_locked_rows==0); %invert locked rows twice, thus leaving them where they started
+    S_inv(:,W(i)) = temp_col;
+    new_locked_rows(L(i)) = 1;
+end
+
+end
 
 
 
