@@ -1,11 +1,10 @@
-function [H, colswaps] = systematizer(H)
+function [H, P] = systematizer(H)
 % H = systematizer(H)
 % convert the binary matrix H into systematic form
 
 [numrows,numcols] = size(H);
-colswaps = zeros(1,numcols);
 H = gf(H);
-numcolswaps = 0;
+P = eye(numcols); % column permutation matrix (see biswas)
 % the below is taken from a first course in coding theory, raymond hill
 % n-k = number of rows in H
 for j = 1:numrows
@@ -37,9 +36,7 @@ for j = 1:numrows
                     H(:,j) = H(:,h);
                     H(:,h) = tempcol;
                     swapcol = 1;
-                    numcolswaps = numcolswaps+1;
-                    colswaps(numcolswaps,h) = 1;
-                    colswaps(numcolswaps,j) = 1;
+                    P(:,[j,h]) = P(:,[h,j]);
                 end
             end
         end
@@ -57,5 +54,6 @@ for j = 1:numrows
 end
 
 H = double(H.x);
-
+H = [H(:,(numrows+1):numcols),H(:,1:(numrows))];
+P = [P(:,(numrows+1):numcols), P(:,1:numrows)];
 end

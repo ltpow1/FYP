@@ -1,20 +1,17 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% McEliece Test
-% depends on S_generator and P_generator
-% does not have a generator for S_inv yet, uses matlabs inv on gf(2)
-% 
+%MCELIECE_HAMMING McEliece cryptosystem with Hamming codes
+%    Implementation of the McEliece public key cryptosystem based on
+%    Hamming codes.
 %
 %
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clear;close all; clc; rng('shuffle');
+
+clear;close all; clc;
 
 [H, G, n, k] = hammgen(10);
 G_gf = gf(G);
 H_gf = gf(H);
 % n = 7; % total number of bits in linear code; dimension of S
 % k = 4; % number of data bits; dimension of P
- t = 1; % maximum error correcting ability of code
+t = 1; % maximum error correcting ability of code
 seed_binary = randi([0 1],1,k);
 seed = bi2de(seed_binary);
 %check that seed<2^(2n-4)

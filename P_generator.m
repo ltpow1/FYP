@@ -1,14 +1,12 @@
 function [P] = P_generator(k,n)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%P_GENERATOR    Permutation generator
+%   P_GENERATOR(k,n) generates a random n-by-n permutation matrix P, using
+%   k as the random number generator seed.
 %
-% Algorithm III For generating large permutation matrix
+%   Primary Reference: "Key Generation of Algebraic-Code Cryptosystems"
+%   Hung-Min Sun and Tzonelih Hwang
 %
-% Inputs: k = seed-key (also used to generate S)
-%         n = dimension of matrix
-%
-% Outputs: P = An nXn permutation matrix
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % STEP 1
 rng(k) %define seed of random number generator
 r = randperm(n-2);

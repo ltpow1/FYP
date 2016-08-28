@@ -30,11 +30,11 @@ G_hat = S_gf*G_gf*P_gf;
 % public key is G_hat, t
 
 %% encryption
-message = randi([0 1],1,k); % generate random message of length k
+message = randi([0 1],1,k) % generate random message of length k
 message_gf = gf(message);
 
 z = zeros(1,n);
-z(randperm(numel(z), t)) = 1; % generate random error of weight t
+z(randperm(numel(z), t)) = 1 % generate random error of weight t
 z_gf = gf(z);
 
 c_gf = message_gf*G_hat+z_gf;
@@ -48,3 +48,5 @@ decoded_m = m_hat*S_inv_gf;
 
 %% results
 decoded_m == message
+
+g

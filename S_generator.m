@@ -1,12 +1,13 @@
 function [S, S_inv] = S_generator(k,n)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   Algorithms for nonsingular matrix S and its inverse S_inv
-%   Algorithms developed by Hung-Min Sun and Tzonelih Hwang
+%S_GENERATOR    Scrambler generator
+%   S_GENERATOR(k,n) randomly generates a non-singular, n-by-n scrambler
+%   matrix S, using k as the random number generator seed. Also generates
+%   the inverse scrambler, S_inv.
 %
-%   takes an n bit long seed k as input.
+%   Primary Reference: "Key Generation of Algebraic-Code Cryptosystems"
+%   Hung-Min Sun and Tzonelih Hwang
 %
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% ALGORITHM I
 % STEP 1
 
