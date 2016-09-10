@@ -29,7 +29,7 @@ for j = (numcols-numrows+1):numcols
             end
         end
         if swaprow == 0
-            h = 0;
+            h = j;
             swapcol = 0;
             while (h < numcols)&&(swapcol ==0)
                 h = h+1;

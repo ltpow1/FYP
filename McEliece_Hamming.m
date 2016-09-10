@@ -9,10 +9,10 @@ clear;close all; clc;
 [H, G, n, k] = hammgen(10);
 G_gf = gf(G);
 H_gf = gf(H);
-% n = 7; % total number of bits in linear code; dimension of S
-% k = 4; % number of data bits; dimension of P
 t = 1; % maximum error correcting ability of code
-seed_binary = randi([0 1],1,k);
+
+seed_bits = 16; % must be less than 32
+seed_binary = randi([0 1],1,seed_bits);
 seed = bi2de(seed_binary);
 %check that seed<2^(2n-4)
 
@@ -26,7 +26,7 @@ P_gf = gf(P);
 
 G_hat = S_gf*G_gf*P_gf;
 
-% public key is G_hat, t
+% public key is [G_hat, t]
 
 %% encryption
 m = randi([0 1],1,k); % generate random message of length k

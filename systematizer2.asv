@@ -1,4 +1,4 @@
-function [G, Prow,Pcol] = systematizer2(G)
+function [G, Prow] = systematizer2(G)
 %SYSTEMATIZER Returns systematic form of H
 %    Convert the binary parity check matrix H into systematic form.
 %    P is a permutation matrix documenting the column swaps required to obtain
@@ -9,11 +9,11 @@ function [G, Prow,Pcol] = systematizer2(G)
 
 [numrows,numcols] = size(G);
 G = gf(G);
-Prow = gf(eye(numrows));
-Pcol = gf(eye(numcols)); % column permutation matrix (see biswas)
+Prow = eye(numrows);
+Pcol = eye(numcols); % column permutation matrix (see biswas)
 
 % n-k = number of rows in H
-for j = 1:min([numrows,numcols])
+for j = 1:numrows
     % step 1 note: step 2 not required, since G is binary
     if G(j,j) == 0
         % step 1
@@ -26,7 +26,7 @@ for j = 1:min([numrows,numcols])
                 G(i,:) = G(j,:);
                 G(j,:) = temprow;
                 swaprow = 1;
-                Prow([j,i],:) = Prow([i,j],:);
+                Prow([j,i],:) = P([i,j],:);
             end
         end
         if swaprow == 0
@@ -48,9 +48,9 @@ for j = 1:min([numrows,numcols])
     
     % step 3
     for i = 1:numrows
-        if (i ~= j)&&(G(i,j)==1)
+        if (i ~= j)&&(G(i,j)==1))
             G(i,:) = G(i,:) + G(j,:);
-            Prow(i,:) = Prow(i,:) + Prow(j,:);
+            Prow(i,:) = Prow() + Prow();
         end
     end
 end

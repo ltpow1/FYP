@@ -1,10 +1,13 @@
 function [gcd,u,v] = extended_euclid(P1,P2,m)
-% [gcd,u,v] = extended_euclid(P1,P2,m)
-% solves bezouts identity uP1 + vP2 = gcd
-% can be used to find the multiplicative inverse of P1 mod P2, given by
-% u. Also produces the gcd of P1 and P2. Applies over GF(m)
-% see bezouts identity and the wiki page for extended euclid algorithm
-
+%EXTENDED_EUCLID    Extended Euclidean Algorithm for polynomials
+%    EXTENDED_EUCLID(P1,P2,m) performs the extended euclidean algorithm to
+%    the polynomials P1 and P2 over the finite field F(2^m). This outputs
+%    the GCD of the two polynomials, gcd, and polynomials u and v such that
+%    bezout's identity, P1u + P2v = gcd is satisfied.
+%    
+%    Primary Reference: Wikipedia page on polynomial GCD
+%    Reference to be updated.
+%   
 
 
 s0 = gf(1,m);

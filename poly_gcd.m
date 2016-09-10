@@ -1,6 +1,7 @@
 function [gcd] = poly_gcd(P1,P2)
-% finds gcd of polynomials p1 and p2 over field F 2^m
-% requires P1 and P2 to be gf arrays
+%POLY_GCD    Calculate polynomial GCD
+%    poly_gcd(P1,P2) calculates the GCD of the polynomials P1 and P2.
+%   
 
 a = P1;
 b = P2;

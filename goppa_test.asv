@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code for testing the goppa code generation, encoding and decoding without
+% the scrambler and permutation matrices found in McEliece.
+
+
+clear;close all; clc; rng('shuffle');
+t = 2;
+m = 4;
+[H, G, n, k,g,L] = goppagen(t,m);
+[hnew,pnew] = systematizer(H);
+all(all(pnew == eye(size(pnew))))
+gnew = [eye(k),hnew(:,1:k)'];
+G_gf = gf(gnew);
+H_gf = gf(H);
+
+
+
+message = randi([0 1],1,k); % generate random message of length k
+message_gf = gf(message);
+
+z = zeros(1,n);
+z(randperm(numel(z), t)) = 1; % generate random error of weight t
+z_gf = gf(z);
+
+c_gf = message_gf*G_gf+z_gf;
+
+[z_hat] = patterson(c_gf,g,H,L,m);
+codeword = message_gf*G_gf;
+decoded_ciphertext = z_hat+c_gf;
+% decoded_message = decoded_ciphertext/G;
+% check = all(decoded_message == message_gf)
+
+% [~,ptry,pcol] = systematizer2(G');
+% decoded_message2 = ptry*decoded_ciphertext';
+% decoded_message2 = decoded_message2(1:k)';
+% check2 = all(decoded_message2 == message_gf)
+

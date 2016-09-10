@@ -1,7 +1,6 @@
 function [gcd,u,v] = patt_EEA(P1,P2,m,t)
-% [gcd,u,v] = extended_euclid(P1,P2,m)
-% solves uP1 + vP2 = gcd
-% this is an altered version used in finding the even and odd parts of
+% PATT_EEA Altered extended euclidea algorithm
+% This is an altered version used in finding the even and odd parts of
 % the error locating polynomial in the patterson algorithm
 
 
@@ -16,11 +15,9 @@ t1 = gf(1,m);
 
 a = P1;
 b = P2;
-iter = 0;
 
 while any(b)&&(((length(a)-1)>floor(t/2))||((length(s0)-1)>floor((t-1)/2)))
     
-    iter = iter+1;
     
     % conv requires removal of leaing zeros
     while (a(1)==0)&&(length(a)>1)

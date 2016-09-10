@@ -1,28 +1,12 @@
-% extended euclid inverse tester
-clear; clc;
-m = 3;
-t = 2;
-g = gf([1 2 1],m);
+% extended_euclid tester
+clear; close all; clc;
 
-S = gf([2 7],m); %want inverse of S mod g
+m = 4;
+n = 5;
 
-[gcd,u,v] = extended_euclid(S,g,m);
+P1 = benor(m,n);
+P2 = gf([1,4,6,2,1],m);
 
-% u should be inverse of S
+[g,u,v] = extended_euclid(P1,P2,m);
 
-onemod = conv(u,S);
-[quo,rem] = deconv(onemod,g);
-
-first_term = conv(v,g);
-second_term = conv(u,S);
-
-first_term = [zeros(1,length(second_term)-length(first_term)),first_term];
-second_term = [zeros(1,length(first_term)-length(second_term)),second_term];
-sigma = first_term+second_term;
-
-gcd
-rem
-sigma
-
-R = poly_root(S,g,m);
-[q,r] = deconv(conv(R,R),g)
+g2 = poly_gcd(P1, P2);
