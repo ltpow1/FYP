@@ -1,4 +1,4 @@
-function [G, Prow,Pcol] = systematizer2(G)
+function [G] = systematizer2(G)
 %SYSTEMATIZER Returns systematic form of H
 %    Convert the binary parity check matrix H into systematic form.
 %    P is a permutation matrix documenting the column swaps required to obtain
@@ -8,9 +8,7 @@ function [G, Prow,Pcol] = systematizer2(G)
 %    Primary Reference: "A first course in coding theory" Raymond Hill
 
 [numrows,numcols] = size(G);
-G = gf(G);
-Prow = gf(eye(numrows));
-Pcol = gf(eye(numcols)); % column permutation matrix (see biswas)
+% G = gf(G);
 
 % n-k = number of rows in H
 for j = 1:min([numrows,numcols])
@@ -26,7 +24,6 @@ for j = 1:min([numrows,numcols])
                 G(i,:) = G(j,:);
                 G(j,:) = temprow;
                 swaprow = 1;
-                Prow([j,i],:) = Prow([i,j],:);
             end
         end
         if swaprow == 0
@@ -39,7 +36,6 @@ for j = 1:min([numrows,numcols])
                     G(:,j) = G(:,h);
                     G(:,h) = tempcol;
                     swapcol = 1;
-                    Pcol(:,[j,h]) = Pcol(:,[h,j]);
                 end
             end
         end
@@ -47,12 +43,18 @@ for j = 1:min([numrows,numcols])
     end
     
     % step 3
-    for i = 1:numrows
-        if (i ~= j)&&(G(i,j)==1)
-            G(i,:) = G(i,:) + G(j,:);
-            Prow(i,:) = Prow(i,:) + Prow(j,:);
-        end
-    end
+    checkCol = G(:,j);
+    checkCol(j) = 0;
+    checkEye = diag(checkCol);
+    G = mod(G + checkEye*repmat(G(j,:),[numrows,1]),2);
+    
+    %old inefficient code below. kept in case something turns out to be
+    %wrong
+%     for i = [1:(j-1),(j+1):numrows]
+%         if (G(i,j)==1)
+%             G(i,:) = G(i,:) + G(j,:);
+%         end
+%     end
 end
 
 end

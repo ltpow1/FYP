@@ -8,7 +8,6 @@ function [H, P] = systematizer(H)
 %    Primary Reference: "A first course in coding theory" Raymond Hill
 
 [numrows,numcols] = size(H);
-H = gf(H);
 P = eye(numcols); % column permutation matrix (see biswas)
 
 % n-k = number of rows in H
@@ -46,11 +45,18 @@ for j = (numcols-numrows+1):numcols
     end
     
     % step 3
-    for i = 1:numrows
-        if i ~= (j-(numcols-numrows))
-            H(i,:) = H(i,:) - H(i,j)*H(j-(numcols-numrows),:);
-        end
-    end
+    
+    checkCol = H(:,j);
+    checkCol(j-(numcols-numrows)) = 0;
+    checkEye = diag(checkCol);
+    H = mod(H + checkEye*repmat(H(j-(numcols-numrows),:),[numrows,1]),2);
+    
+%     for i = [1:(j-(numcols-numrows)-1),(j-(numcols-numrows)+1):numrows]
+%             if H(i,j)==1
+%             H(i,:) = H(i,:) + H(j-(numcols-numrows),:);
+%             end
+% 
+%     end
     
     
 end

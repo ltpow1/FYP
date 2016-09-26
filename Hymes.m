@@ -17,44 +17,13 @@ Gsys = [eye(k),Hsys(:,1:k)'];
 if(all(all(Psys == eye(size(Psys))))==0)
     L = L*Psys;
     % should move below this line into a function call. genH or something
-    V = gf(zeros(t,n),m);
-    D = gf(zeros(n),m);
-    X = gf(zeros(t),m);
-    
-    for i = 1:n
-        D(i,i) = 1./(polyval(g,L(i)));
-    end
-    
-    for j = 1:t
-        V(j,:) = L.^(j-1);
-    end
-    
-    for i = 1:t
-        X(i,:) = [fliplr(g(1:i)),zeros(1,t-i)];
-    end
-    
-    tempH = X*V*D; % t by n matrix
-    
-    % now convert to binary form, mt by n
-    % by expanding elements of H into binary column vectors
-    
-    binH = dec2bin(double(tempH.x))';
-    
-    for i = 1:n
-        tempVec = [];
-        for j = 1:t
-            tempVec = [tempVec;binH(:,j+t*(i-1))];
-        end
-        newH(:,i) = tempVec;
-    end
-    
-    H = double(newH)-48;
+    H = goppargen(g,L);
 end
 
 G_gf = gf(Gsys);
 H_gf = gf(H);
 
-G_hat = G_gf(:,(k+1):n); %exclude the identity part of the matrix
+G_hat = G(:,(k+1):n); %exclude the identity part of the matrix
 
 % public key is [G_hat, t]
 

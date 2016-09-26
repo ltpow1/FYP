@@ -5,8 +5,8 @@
 %
 
 clear; clc;
-k = 10; % can also use T = bchnumerr(n) to find k for desired n
-n = 511;
+k = 5; % can also use T = bchnumerr(n) to find k for desired n
+n = 15;
 m = log2(n+1);
 t = bchnumerr(n,k); % maximum error correcting ability of code
 
@@ -29,21 +29,18 @@ for i = 1:n
 end
 
 H = double(newH)-48;
-H = gf(H);
+
 %%
 seed_bits = 16; % must be less than 32
 seed_binary = randi([0 1],1,seed_bits);
 seed = bi2de(seed_binary);
 
 [S,S_inv] = S_generator(seed,2*m*t);
-S_gf = gf(S);
-
-S_inv_gf = gf(S_inv);
 
 P = P_generator(seed,n);
-P_gf = gf(P);
 
-H_hat = S_gf*H*P_gf;
+
+H_hat = mod(S*H*P,2);
 
 % public key is [H_hat, t]
 
@@ -56,7 +53,7 @@ message_gf = gf(message);
 c_gf = H_hat*message_gf';
 %% decryption
 
-c_hat = S_inv_gf*c_gf;
+c_hat = S_inv*c_gf;
 % c_hat is the syndrome of the permuted message, Pm
 
 [Pm,synd_matrix] = mybchdec(c_hat,n,m,t);

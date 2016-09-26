@@ -5,53 +5,59 @@
 %
 
 clear; clc;
-k = 4; % can also use T = bchnumerr(n) to find k for desired n
-n = 7;
-t = bchnumerr(n,k); % maximum error correcting ability of code
+m = 10;
+t = 5; % maximum error correcting ability of code
+n = 2^m-1;
+k = n-t*m; % can also use T = bchnumerr(n) to find k for desired n
 messages = gf(eye(k));
 
-G = gf(zeros(k,n));
+polyG = gf(zeros(k,n));
 
+po = bchgenpoly(n,k);
 for i = 1:k
     msg = messages(i,:);
-    G(i,:) = bchenc(msg,n,k);
+    polyG(i,:) = conv(msg,po);
 end
-% G is now the systematic generator matrix of the bch code
 
-H = [G(:,(k+1):n)',gf(eye(n-k))];
+G = systematizer2(double(polyG.x));
+
+% oldG = gf(zeros(k,n));
+% for i = 1:k
+%     msg = messages(i,:);
+%     oldG(i,:) = bchenc(msg,n,k);
+% end
+
 %% 
 seed_bits = 16; % must be less than 32
 seed_binary = randi([0 1],1,seed_bits);
 seed = bi2de(seed_binary);
 
 [S,S_inv] = S_generator(seed,k);
-S_gf = gf(S);
 
-S_inv_gf = gf(S_inv);
 
 P = P_generator(seed,n);
-P_gf = gf(P);
 
-G_hat = S_gf*G*P_gf;
+
+G_hat = mod(S*G*P,2);
 
 % public key is [G_hat, t]
 
 %% encryption
-m = randi([0 1],1,k); % generate random message of length k
-m_gf = gf(m);
+message = randi([0 1],1,k); % generate random message of length k
+message = gf(message);
 
 z = zeros(1,n);
 z(randperm(numel(z), t)) = 1; % random error of weight t
-z_gf = gf(z);
+z = gf(z);
 
-c_gf = m_gf*G_hat+z_gf;
+c = message*G_hat+z;
 
 %% decryption
 
-c_hat = c_gf*P';
+c_hat = c*P';
 mS = bchdec(c_hat, n,k);
 
-decoded_m = gf(mS)*S_inv_gf;
+decoded_m = mS*S_inv;
 
 %% results
-all(m==decoded_m)
+all(message==decoded_m)

@@ -1,7 +1,7 @@
 function [gcd] = poly_gcd(P1,P2)
 %POLY_GCD    Calculate polynomial GCD
 %    poly_gcd(P1,P2) calculates the GCD of the polynomials P1 and P2.
-%   
+%
 
 a = P1;
 b = P2;
@@ -22,8 +22,9 @@ while any(b)
     if(all(b==b(1)))
         b = b/b(1);
     end
-    
-    [quo, remain] = deconv(a,b);
+
+    [~, remain] = deconv(a,b);
+
     a = b;
     b = remain;
 end

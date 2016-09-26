@@ -5,6 +5,7 @@ function [P] = monic_poly(m,t)
 
 P = zeros(1,t+1);
 P(1) = 1;
-P(t) = randi([0,2^m-1],1);
-P(t+1) = randi([0,2^m-1],1);
+for j = 2:(t+1)
+    P(j) = randi([0,2^m-1],1);
+end
 end

@@ -8,15 +8,15 @@ function f = benor(m,n)
 
 q = 2^m;
 not_irred = 1;
-max_iter = 50; %After this number of iterations, give up
+max_iter = 20; %After this number of iterations, give up
 iter = 0;
-
+factors = [0,sort(n./unique(factor(n)))];
 while (not_irred == 1)&&(iter <= max_iter)
-    iter = iter+1;
+    iter = iter+1
     % step 1 randomly choose a monic polynomial
     f = gf(monic_poly(m,n),m);
     % step 2
-    for i = 1:floor(n/2)
+    for i = factors(2:end)-factors(1:(end-1))%1:floor(n/2)
         % calculate gcd(x^(q^i)-x,f)
         % first construct the polynomial g = x^q^i-x
         % note that in fields with characteristic 2, -1 = 1
@@ -43,7 +43,7 @@ while (not_irred == 1)&&(iter <= max_iter)
 end
 
 if iter > max_iter
-    disp('fail')
+    error('failed to find irreducible polynomial in iteration limit')
 end
 
 end

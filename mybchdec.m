@@ -5,11 +5,13 @@ alpha = gf(2,m).*ones(1,n);
 alpha = alpha.^(0:(n-1));
 % convert sydrome from binary to gf(m)
 synd_array = synd.x';
-gfsynd = zeros(1,2*m*t);
+gfsynd = zeros(1,2*t);
 for i = 1:(2*t)
     gfsynd(i) = bi2de(synd_array(((i-1)*m+1):(i*m)),'left-msb');
 end
 gfsynd = gf(gfsynd,m);
+%trying out algorithm in table 8.4 of mceliece
+
 
 % use peterson-gorenstein-zierler algorithm to find error locator
 % polynomial sigma

@@ -19,7 +19,7 @@ b = P2;
 while any(b)&&(((length(a)-1)>floor(t/2))||((length(s0)-1)>floor((t-1)/2)))
     
     
-    % conv requires removal of leaing zeros
+    % conv requires removal of leading zeros
     while (a(1)==0)&&(length(a)>1)
         a = a(2:length(a));
     end
