@@ -1,8 +1,8 @@
 % generate and save some irreducible polynomials
 clear
 clc
-m = 11;
-t = 97;
+m = 7;
+t = 7;
 % note, if t is prime, calculation is MUCH faster
 
 g = benor(m,t);

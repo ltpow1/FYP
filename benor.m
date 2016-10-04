@@ -12,7 +12,7 @@ max_iter = 20; %After this number of iterations, give up
 iter = 0;
 factors = [0,sort(n./unique(factor(n)))];
 while (not_irred == 1)&&(iter <= max_iter)
-    iter = iter+1
+    iter = iter+1;
     % step 1 randomly choose a monic polynomial
     f = gf(monic_poly(m,n),m);
     % step 2

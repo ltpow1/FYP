@@ -1,4 +1,4 @@
-function [G] = systematizer2(G)
+function [G,Pcol,Prow] = systematizer2(G,allow_colswaps)
 %SYSTEMATIZER Returns systematic form of H
 %    Convert the binary parity check matrix H into systematic form.
 %    P is a permutation matrix documenting the column swaps required to obtain
@@ -8,6 +8,8 @@ function [G] = systematizer2(G)
 %    Primary Reference: "A first course in coding theory" Raymond Hill
 
 [numrows,numcols] = size(G);
+Pcol = eye(numcols);
+Prow = eye(numrows);
 % G = gf(G);
 
 % n-k = number of rows in H
@@ -24,9 +26,10 @@ for j = 1:min([numrows,numcols])
                 G(i,:) = G(j,:);
                 G(j,:) = temprow;
                 swaprow = 1;
+                Prow([i,j],:) = Prow([j,i],:);
             end
         end
-        if swaprow == 0
+        if (swaprow == 0)&&(allow_colswaps)
             h = 0;
             swapcol = 0;
             while (h < numcols)&&(swapcol ==0)
@@ -36,6 +39,7 @@ for j = 1:min([numrows,numcols])
                     G(:,j) = G(:,h);
                     G(:,h) = tempcol;
                     swapcol = 1;
+                    Pcol(:,[j,h]) = Pcol(:,[h,j]);
                 end
             end
         end

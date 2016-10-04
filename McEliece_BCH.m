@@ -19,7 +19,7 @@ for i = 1:k
     polyG(i,:) = conv(msg,po);
 end
 
-G = systematizer2(double(polyG.x));
+[G,~,~] = systematizer2(double(polyG.x),1);
 
 % oldG = gf(zeros(k,n));
 % for i = 1:k
