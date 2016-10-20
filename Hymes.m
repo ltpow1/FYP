@@ -20,39 +20,39 @@ if(all(all(Psys == eye(size(Psys))))==0)
     H = goppargen(g,L);
 end
 
-G_gf = gf(Gsys);
-H_gf = gf(H);
+Ggf = gf(Gsys);
+Hgf = gf(H);
 
-G_hat = G(:,(k+1):n); %exclude the identity part of the matrix
+Ghat = G(:,(k+1):n); %exclude the identity part of the matrix
 
-% public key is [G_hat, t]
+% public key is [Ghat, t]
 
 %% encryption
 message = randi([0 1],1,k); % generate random message of length k
-message_gf = gf(message);
+messagegf = gf(message);
 
 z = zeros(1,n);
 z(randperm(numel(z), t)) = 1; % generate random error of weight t
-z_gf = gf(z);
+zgf = gf(z);
 
-c_gf = [message_gf,message_gf*G_hat]+z_gf;
+cgf = [messagegf,messagegf*Ghat]+zgf;
 
 %% decryption
 
 
-[z_hat] = patterson(c_gf,g,H_gf,L,m);
+[zhat] = patterson(cgf,g,Hgf,L,m);
 
-decoded_ciphertext = z_hat+c_gf;
+decodedciphertext = zhat+cgf;
 
 
-% mS = decoded_ciphertext/G;
-% decoded_message = mS*S_inv;
+% mS = decodedciphertext/G;
+% decodedmessage = mS*Sinv;
 
 % [~,ptry,pcol] = systematizer2(G');
-% mS = ptry*decoded_ciphertext';
+% mS = ptry*decodedciphertext';
 % mS = mS2(1:k)';
-% decoded_message = mS*S_inv;
+% decodedmessage = mS*Sinv;
 
-decoded_message = decoded_ciphertext(1:k);
+decodedmessage = decodedciphertext(1:k);
 
-check = all(decoded_message == message_gf)
+check = all(decodedmessage == messagegf)

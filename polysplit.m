@@ -1,6 +1,6 @@
-function [g0, g1] = poly_split(g,m)
-%POLY_SPLIT Splits polynomials into even and odd parts
-%    [g0, g1] = POLY_SPLIT(g,m) splits the polynomial g defined over F(2^m)
+function [g0, g1] = polysplit(g,m)
+%POLYSPLIT Splits polynomials into even and odd parts
+%    [g0, g1] = POLYSPLIT(g,m) splits the polynomial g defined over F(2^m)
 %    into even and odd parts g0 and g1 such that g = g0^2 + x*g1^2.
 %    
 %    Primary Reference: ""
@@ -16,8 +16,8 @@ sqrtg = g.^(2^(m-1)); % reference: Huber, note on decoding goppa codes
 % sqrtg = gf(zeros(1,t+1),m);
 % 
 % for i = 1:(t+1)
-%     the_roots = roots([1 0 g(i)]);
-%     sqrtg(i) = the_roots(1);
+%     theroots = roots([1 0 g(i)]);
+%     sqrtg(i) = theroots(1);
 % end
 count = 1;
 

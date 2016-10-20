@@ -1,4 +1,4 @@
-function [G,Pcol,Prow] = systematizer2(G,allow_colswaps)
+function [G,Pcol,Prow] = systematizer2(G,allowcolswaps)
 %SYSTEMATIZER Returns systematic form of H
 %    Convert the binary parity check matrix H into systematic form.
 %    P is a permutation matrix documenting the column swaps required to obtain
@@ -29,7 +29,7 @@ for j = 1:min([numrows,numcols])
                 Prow([i,j],:) = Prow([j,i],:);
             end
         end
-        if (swaprow == 0)&&(allow_colswaps)
+        if (swaprow == 0)&&(allowcolswaps)
             h = 0;
             swapcol = 0;
             while (h < numcols)&&(swapcol ==0)

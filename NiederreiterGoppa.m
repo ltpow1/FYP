@@ -1,4 +1,4 @@
-%MIEDERREITER_GOPPA Niederreiter cryptosystem with Goppa codes
+%MIEDERREITERGOPPA Niederreiter cryptosystem with Goppa codes
 %    Implementation of the Niederreiter public key cryptosystem based on
 %    binary Goppa codes.
 %    
@@ -24,38 +24,38 @@ name = strcat('m=',num2str(m),'t=',num2str(t),'.mat');
         H = goppargen(g,L);
     end
 
-G_gf = gf(Gsys);
-H_gf = gf(H);
+Ggf = gf(Gsys);
+Hgf = gf(H);
 l = 10; % length of seed (in bits) max atm is 31, limitation of rng
-seed_binary = randi([0 1],1,l);
-seed = bi2de(seed_binary);
+seedbinary = randi([0 1],1,l);
+seed = bi2de(seedbinary);
 %check that seed<2^(2n-4)
 
-[S, S_inv] = S_generator(seed,n-k);
+[S, Sinv] = Sgenerator(seed,n-k);
 
 
-P = P_generator(seed,n);
+P = Pgenerator(seed,n);
 
 
-H_pub = mod(S*H*P,2);
+Hpub = mod(S*H*P,2);
 
-% public key is H_pub, t
+% public key is Hpub, t
 
 %% encryption
 message = zeros(1,n);
 message(randperm(numel(message), randi([0 t]))) = 1; % generate random message of weight at most t
-message_gf = gf(message);
+messagegf = gf(message);
 
 
-c_gf = H_pub*message_gf';
+cgf = Hpub*messagegf';
 
 %% decryption
 
-c_hat = S_inv*c_gf;
-z_hat = patterson(message_gf,g,H,L,m, c_hat');
+chat = Sinv*cgf;
+zhat = patterson(messagegf,g,H,L,m, chat');
 
-decoded_m = P'*z_hat';
+decodedm = P'*zhat';
 
 %% results
-check = all(decoded_m == message')
+check = all(decodedm == message')
 

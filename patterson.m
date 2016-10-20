@@ -1,6 +1,6 @@
-function [decoded_error] = patterson(encoded_mess_w_err,g,H,L,m, synd)
+function [decodederror] = patterson(encodedmesswerr,g,H,L,m, synd)
 %PATTERSON Decodes Goppa codes using the Patterson algorithm
-%    [decoded_mess, decoded_error] = patterson(encoded_mess_w_err,g,G,H,L,m, synd)
+%    [decodedmess, decodederror] = patterson(encodedmesswerr,g,G,H,L,m, synd)
 %    
 
 
@@ -10,19 +10,19 @@ n = 2^m;
 k = n-m*t;
 
 if nargin == 5
-    synd = encoded_mess_w_err*H';
+    synd = encodedmesswerr*H';
 end
 
-synd_array = synd.x;
+syndarray = synd.x;
 %convert synd from GF(2) to GF(2^m)
 for i = 1:t
-    gfsynd(i) = bi2de(synd_array(((i-1)*m+1):(i*m)),'left-msb');
+    gfsynd(i) = bi2de(syndarray(((i-1)*m+1):(i*m)),'left-msb');
 end
 gfsynd = gf(gfsynd,m);
 
 % now follow the steps of the patterson algorithm
 % first, we need the inverse of the syndrome mod g
-[~,T,~] = extended_euclid(gfsynd,g,m);
+[~,T,~] = extendedeuclid(gfsynd,g,m);
 [~,T] = deconv(T,g);
 
 % check if T = x
@@ -45,33 +45,33 @@ else
     Tx = fliplr(Tx);
     
     % R = sqrt(T+x) mod g
-    R = poly_root(Tx,g,m);
+    R = polyroot(Tx,g,m);
     [~,R] = deconv(R,g);
-    [gcd,~,v] = patt_EEA(g, R, m, t);
+    [gcd,~,v] = pattEEA(g, R, m, t);
     
-    first_term = conv(gcd,gcd);
-    second_term = conv(gf([1 0],m),conv(v,v));
+    firstterm = conv(gcd,gcd);
+    secondterm = conv(gf([1 0],m),conv(v,v));
     % need these terms to be the same length for addition
-    first_term = [zeros(1,length(second_term)-length(first_term)),first_term];
-    second_term = [zeros(1,length(first_term)-length(second_term)),second_term];
-    sigma = first_term+second_term;
+    firstterm = [zeros(1,length(secondterm)-length(firstterm)),firstterm];
+    secondterm = [zeros(1,length(firstterm)-length(secondterm)),secondterm];
+    sigma = firstterm+secondterm;
     sigma = sigma./sigma(1);
 end
 
-error_roots = roots(sigma);
+errorroots = roots(sigma);
 
-for i = 1:length(error_roots)
-    error_index(i) = find(L==error_roots(i));
+for i = 1:length(errorroots)
+    errorindex(i) = find(L==errorroots(i));
 end
 
-decoded_error = zeros(1,n);
+decodederror = zeros(1,n);
 
-if (length(error_roots)>=1)
+if (length(errorroots)>=1)
     
-    for j = 1:length(error_index)
-        decoded_error(error_index(j)) = 1;
+    for j = 1:length(errorindex)
+        decodederror(errorindex(j)) = 1;
     end
     
-    %      z==decoded_error
+    %      z==decodederror
 end
 end

@@ -1,4 +1,4 @@
-function [G_hat,g,L,S_inv,P,H] = mceliecekeygen(m,t)
+function [Ghat,g,L,Sinv,P,H] = mceliecekeygen(m,t)
 
 
     name = strcat('m=',num2str(m),'t=',num2str(t),'.mat');
@@ -17,19 +17,19 @@ function [G_hat,g,L,S_inv,P,H] = mceliecekeygen(m,t)
         H = goppargen(g,L);
     end
     
-    G_gf = gf(Gsys);
-    H_gf = gf(H);
+    Ggf = gf(Gsys);
+    Hgf = gf(H);
     
-    seed_bits = 16; % must be less than 32
-    seed_binary = randi([0 1],1,seed_bits);
-    seed = bi2de(seed_binary);
+    seedbits = 16; % must be less than 32
+    seedbinary = randi([0 1],1,seedbits);
+    seed = bi2de(seedbinary);
     
-    [S,S_inv] = S_generator(seed,k);
+    [S,Sinv] = Sgenerator(seed,k);
 
     
-    P = P_generator(seed,n);
+    P = Pgenerator(seed,n);
 
     
-    G_hat = mod(S*Gsys*P,2);
+    Ghat = mod(S*Gsys*P,2);
     
 end

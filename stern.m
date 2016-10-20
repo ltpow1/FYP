@@ -1,6 +1,6 @@
-function codeword = stern(G_hat,y,w,p,l)
+function codeword = stern(Ghat,y,w,p,l)
 %STERN Applies Stern's Attack
-%    Stern's algorithm takes a generator matrix G_hat and a codeword with
+%    Stern's algorithm takes a generator matrix Ghat and a codeword with
 %    added error, y, and finds the error of weight w. p and l are
 %    parameters controlling the runtime and probability of success of the
 %    algorithm.
@@ -12,9 +12,9 @@ function codeword = stern(G_hat,y,w,p,l)
 % testing sterns algorithm. see roering and engelbert
 %first, generate a gopppa code for testing
 n = length(y);
-k = size(G_hat,1);
+k = size(Ghat,1);
 
-G = [G_hat;y];%append y to G to form new code
+G = [Ghat;y];%append y to G to form new code
 kstern = k+1;
 
 % now find parity check matrix of new G
@@ -22,9 +22,9 @@ kstern = k+1;
 Hstern = gen2par(Gsys);
 
 iter = 0;
-max_iter = 200;
+maxiter = 200;
 codeword = zeros(1,n);
-while (iter<max_iter)&&(~any(codeword))
+while (iter<maxiter)&&(~any(codeword))
     iter = iter+1;
     %now select n-k random columns of G and row reduce the resulting matrix
     % so permute n-k chosen columns to left for systematization, then undo
@@ -55,16 +55,16 @@ while (iter<max_iter)&&(~any(codeword))
     xchoose = rand([1,kstern])<0.5;
     %ensure at least one col for x and y each
     xchoose(1:2) = [1,0];
-    remaining_cols = cols((n-kstern+1):n);
+    remainingcols = cols((n-kstern+1):n);
     
-    xsubset = remaining_cols(xchoose);
-    ysubset = remaining_cols(~xchoose);
+    xsubset = remainingcols(xchoose);
+    ysubset = remainingcols(~xchoose);
     
     % now randomly select l rows
     L = randperm(n-kstern,l);
     
     % for every size p subset of cols of X compute sum of columns, call it piA
-    Asubsets = logical(all_poss(length(xsubset)-p,p,length(xsubset)-p));
+    Asubsets = logical(allposs(length(xsubset)-p,p,length(xsubset)-p));
     numsubs = size(Asubsets);
     piA = zeros(l,numsubs(1));
     for i = 1:numsubs(1)
@@ -72,7 +72,7 @@ while (iter<max_iter)&&(~any(codeword))
     end
     
     % same for y piB
-    Bsubsets = logical(all_poss(length(ysubset)-p,p,length(ysubset)-p));
+    Bsubsets = logical(allposs(length(ysubset)-p,p,length(ysubset)-p));
     numsubs2 = size(Bsubsets);
     piB = zeros(l,numsubs2(1));
     for i = 1:numsubs2(1)

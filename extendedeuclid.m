@@ -1,8 +1,13 @@
-function [gcd,u,v] = patt_EEA(P1,P2,m,t)
-% PATT_EEA Altered extended euclidea algorithm
-% This is an altered version used in finding the even and odd parts of
-% the error locating polynomial in the patterson algorithm
-
+function [gcd,u,v] = extendedeuclid(P1,P2,m)
+%EXTENDEDEUCLID    Extended Euclidean Algorithm for polynomials
+%    EXTENDEDEUCLID(P1,P2,m) performs the extended euclidean algorithm to
+%    the polynomials P1 and P2 over the finite field F(2^m). This outputs
+%    the GCD of the two polynomials, gcd, and polynomials u and v such that
+%    bezout's identity, P1u + P2v = gcd is satisfied.
+%    
+%    Primary Reference: Wikipedia page on polynomial GCD
+%    Reference to be updated.
+%   
 
 
 s0 = gf(1,m);
@@ -15,11 +20,13 @@ t1 = gf(1,m);
 
 a = P1;
 b = P2;
+iter = 0;
 
-while any(b)&&(((length(a)-1)>floor(t/2))||((length(s0)-1)>floor((t-1)/2)))
+while any(b)
     
+    iter = iter+1;
     
-    % conv requires removal of leading zeros
+    % conv requires removal of leaing zeros
     while (a(1)==0)&&(length(a)>1)
         a = a(2:length(a));
     end

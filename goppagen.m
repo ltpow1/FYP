@@ -16,7 +16,7 @@ function [H,n,k,g,L] = goppagen(t,m,g)
 n = 2^m;
 k = n-m*t;
 if nargin == 2 % must produce g
-    g = benor(m,t); % g is the irreducible goppa polynomial
+    g = rabin(m,t); % g is the irreducible goppa polynomial
 end
 % L, the support of the code, can be a random vector containing all
 % elements of the field, since irreducible polynomials have no zeros

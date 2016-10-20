@@ -5,7 +5,7 @@ m = 7;
 t = 7;
 % note, if t is prime, calculation is MUCH faster
 
-g = benor(m,t);
+g = rabin(m,t);
 
 mstr = num2str(m);
 tstr = num2str(t);

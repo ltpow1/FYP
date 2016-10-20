@@ -1,4 +1,4 @@
-%NIEDERREITER_BCH Niederreiter cryptosystem with BCH codes
+%NIEDERREITERBCH Niederreiter cryptosystem with BCH codes
 %    Implementation of the Niederreiter public key cryptosystem based on
 %    BCH codes.
 %
@@ -31,34 +31,34 @@ end
 H = double(newH)-48;
 
 %%
-seed_bits = 16; % must be less than 32
-seed_binary = randi([0 1],1,seed_bits);
-seed = bi2de(seed_binary);
+seedbits = 16; % must be less than 32
+seedbinary = randi([0 1],1,seedbits);
+seed = bi2de(seedbinary);
 
-[S,S_inv] = S_generator(seed,2*m*t);
+[S,Sinv] = Sgenerator(seed,2*m*t);
 
-P = P_generator(seed,n);
+P = Pgenerator(seed,n);
 
 
-H_hat = mod(S*H*P,2);
+Hhat = mod(S*H*P,2);
 
-% public key is [H_hat, t]
+% public key is [Hhat, t]
 
 %% encryption
 message = zeros(1,n);
 message(randperm(numel(message), randi([0 t]))) = 1; % generate random message of weight at most t
-message_gf = gf(message);
+messagegf = gf(message);
 
 
-c_gf = H_hat*message_gf';
+cgf = Hhat*messagegf';
 %% decryption
 
-c_hat = S_inv*c_gf;
-% c_hat is the syndrome of the permuted message, Pm
+chat = Sinv*cgf;
+% chat is the syndrome of the permuted message, Pm
 
-[Pm,synd_matrix] = mybchdec(c_hat,n,m,t);
+[Pm,syndmatrix] = mybchdec(chat,n,m,t);
 
-decoded_m = P'*Pm;
+decodedm = P'*Pm;
 
 %% results
-all(message'==decoded_m)
+all(message'==decodedm)

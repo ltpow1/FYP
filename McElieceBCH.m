@@ -1,4 +1,4 @@
-%MCELIECE_BCH McEliece cryptosystem with BCH codes
+%MCELIECEBCH McEliece cryptosystem with BCH codes
 %    Implementation of the McEliece public key cryptosystem based on BCH
 %    codes.
 %
@@ -28,19 +28,19 @@ end
 % end
 
 %% 
-seed_bits = 16; % must be less than 32
-seed_binary = randi([0 1],1,seed_bits);
-seed = bi2de(seed_binary);
+seedbits = 16; % must be less than 32
+seedbinary = randi([0 1],1,seedbits);
+seed = bi2de(seedbinary);
 
-[S,S_inv] = S_generator(seed,k);
-
-
-P = P_generator(seed,n);
+[S,Sinv] = Sgenerator(seed,k);
 
 
-G_hat = mod(S*G*P,2);
+P = Pgenerator(seed,n);
 
-% public key is [G_hat, t]
+
+Ghat = mod(S*G*P,2);
+
+% public key is [Ghat, t]
 
 %% encryption
 message = randi([0 1],1,k); % generate random message of length k
@@ -50,14 +50,14 @@ z = zeros(1,n);
 z(randperm(numel(z), t)) = 1; % random error of weight t
 z = gf(z);
 
-c = message*G_hat+z;
+c = message*Ghat+z;
 
 %% decryption
 
-c_hat = c*P';
-mS = bchdec(c_hat, n,k);
+chat = c*P';
+mS = bchdec(chat, n,k);
 
-decoded_m = mS*S_inv;
+decodedm = mS*Sinv;
 
 %% results
-all(message==decoded_m)
+all(message==decodedm)
