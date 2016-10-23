@@ -1,16 +1,14 @@
 function [G,Pcol,Prow] = systematizer2(G,allowcolswaps)
-%SYSTEMATIZER Returns systematic form of H
-%    Convert the binary parity check matrix H into systematic form.
-%    P is a permutation matrix documenting the column swaps required to obtain
-%    the systematic form. Note this is an altered version of the algorithm
-%    from Hill to be used with parity check matrices.
+%SYSTEMATIZER Returns systematic form of G
+%    Convert the binary generator matrix G into systematic form. Pcol is a
+%    permutation matrix documenting the column swaps required to obtain the
+%    systematic form. 
 %
 %    Primary Reference: "A first course in coding theory" Raymond Hill
 
 [numrows,numcols] = size(G);
 Pcol = eye(numcols);
 Prow = eye(numrows);
-% G = gf(G);
 
 % n-k = number of rows in H
 for j = 1:min([numrows,numcols])
@@ -51,14 +49,7 @@ for j = 1:min([numrows,numcols])
     checkCol(j) = 0;
     checkEye = diag(checkCol);
     G = mod(G + checkEye*repmat(G(j,:),[numrows,1]),2);
-    
-    %old inefficient code below. kept in case something turns out to be
-    %wrong
-%     for i = [1:(j-1),(j+1):numrows]
-%         if (G(i,j)==1)
-%             G(i,:) = G(i,:) + G(j,:);
-%         end
-%     end
+
 end
 
 end

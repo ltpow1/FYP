@@ -1,8 +1,8 @@
 % generate and save some irreducible polynomials
 clear
 clc
-m = 7;
-t = 7;
+m = 10;
+t = 71;
 % note, if t is prime, calculation is MUCH faster
 
 g = rabin(m,t);

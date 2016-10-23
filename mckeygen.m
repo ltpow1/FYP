@@ -1,5 +1,7 @@
-function [Ghat,g,L,Sinv,P,H] = mceliecekeygen(m,t)
-
+function [Ghat,g,L,Sinv,P,H] = mckeygen(m,t)
+%MCELIECEKEYGEN Generates public and private keys for McEliece system
+%   Makes use of goppagen to generate specified binary goppa code.
+%
 
     name = strcat('m=',num2str(m),'t=',num2str(t),'.mat');
     if exist(name,'file') == 2 
@@ -16,20 +18,10 @@ function [Ghat,g,L,Sinv,P,H] = mceliecekeygen(m,t)
         L = L*Psys;
         H = goppargen(g,L);
     end
-    
-    Ggf = gf(Gsys);
-    Hgf = gf(H);
-    
     seedbits = 16; % must be less than 32
     seedbinary = randi([0 1],1,seedbits);
     seed = bi2de(seedbinary);
-    
     [S,Sinv] = Sgenerator(seed,k);
-
-    
     P = Pgenerator(seed,n);
-
-    
-    Ghat = mod(S*Gsys*P,2);
-    
+    Ghat = mod(S*Gsys*P,2); 
 end

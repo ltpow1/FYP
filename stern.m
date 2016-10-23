@@ -8,13 +8,9 @@ function codeword = stern(Ghat,y,w,p,l)
 %    Primary Reference: "A method for finding codewords of small weight"
 %    Stern
 
-
-% testing sterns algorithm. see roering and engelbert
-%first, generate a gopppa code for testing
 n = length(y);
 k = size(Ghat,1);
-
-G = [Ghat;y];%append y to G to form new code
+G = [Ghat;y]; %append y to G to form new code
 kstern = k+1;
 
 % now find parity check matrix of new G
@@ -22,7 +18,7 @@ kstern = k+1;
 Hstern = gen2par(Gsys);
 
 iter = 0;
-maxiter = 200;
+maxiter = 1000;
 codeword = zeros(1,n);
 while (iter<maxiter)&&(~any(codeword))
     iter = iter+1;
@@ -63,7 +59,7 @@ while (iter<maxiter)&&(~any(codeword))
     % now randomly select l rows
     L = randperm(n-kstern,l);
     
-    % for every size p subset of cols of X compute sum of columns, call it piA
+    % for every size p subset of cols of X compute sum of cols = piA
     Asubsets = logical(allposs(length(xsubset)-p,p,length(xsubset)-p));
     numsubs = size(Asubsets);
     piA = zeros(l,numsubs(1));
@@ -71,7 +67,7 @@ while (iter<maxiter)&&(~any(codeword))
         piA(:,i) = mod(sum(Hstern2(L,xsubset(Asubsets(i,:))),2),2);
     end
     
-    % same for y piB
+    % same for Y and piB
     Bsubsets = logical(allposs(length(ysubset)-p,p,length(ysubset)-p));
     numsubs2 = size(Bsubsets);
     piB = zeros(l,numsubs2(1));
@@ -84,12 +80,14 @@ while (iter<maxiter)&&(~any(codeword))
         for j = 1:numsubs2(1)
             collision = all(piA(:,i)==piB(:,j));
             if collision
-                newsum = mod(sum(Hstern2(:,[xsubset(Asubsets(i,:)),ysubset(Bsubsets(j,:))]),2),2);
+                newsum = mod(sum(Hstern2(:,[xsubset(Asubsets(i,:)),...
+                    ysubset(Bsubsets(j,:))]),2),2);
                 % if the above vector has weiht w-2p, can form code word
                 if sum(newsum)==(w-2*p)
                     % calculate codeword
                     codeword = zeros(1,n);
-                    codeword([xsubset(Asubsets(i,:)),ysubset(Bsubsets(j,:))]) = 1;
+                    codeword([xsubset(Asubsets(i,:)),...
+                        ysubset(Bsubsets(j,:))]) = 1;
                     codeword(cols(logical(newsum))) = 1;
                     codeword = codeword*P1';
                     return
@@ -97,9 +95,7 @@ while (iter<maxiter)&&(~any(codeword))
             end
         end
     end
-    
 end
-
 end
 
 

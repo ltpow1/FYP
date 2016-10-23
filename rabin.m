@@ -1,8 +1,8 @@
-function f = rabin(m,n)
+function f = rabin(m,t)
 %RABIN    Irreducible polynomial generator
-%   RABIN(m,n) implements a modified version of Rabin's algorithm for 
+%   RABIN(m,t) implements a modified version of Rabin's algorithm for 
 %   testing the irreducibility of polynomials over finite fields to
-%   generate irreducible polynomials of degree n. For best case run-times,
+%   generate irreducible polynomials of degree t. For best case run-times,
 %   n should be prime.
 %
 %   Primary Reference: "Handbook of Finite Fields chapter 11: Algorithms"
@@ -12,11 +12,11 @@ q = 2^m;
 notirred = 1;
 maxiter = 20; %After this number of iterations, give up
 iter = 0;
-factors = [0,sort(n./unique(factor(n)))];
+factors = [0,sort(t./unique(factor(t)))];
 while (notirred == 1)&&(iter <= maxiter)
     iter = iter+1;
     % step 1 randomly choose a monic polynomial
-    f = gf(monicpoly(m,n),m);
+    f = gf(monicpoly(m,t),m);
     % step 2
     for i = factors(2:end)-factors(1:(end-1))%1:floor(n/2)
         % calculate gcd(x^(q^i)-x,f)
@@ -40,12 +40,9 @@ while (notirred == 1)&&(iter <= maxiter)
             end
         end
         notirred = 0;
-        
     end
 end
-
 if iter > maxiter
     error('failed to find irreducible polynomial in iteration limit')
 end
-
 end

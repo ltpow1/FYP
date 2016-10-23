@@ -9,23 +9,16 @@ function [gcd,u,v] = extendedeuclid(P1,P2,m)
 %    Reference to be updated.
 %   
 
-
 s0 = gf(1,m);
 s1 = gf(0,m);
-
-
 t0 = gf(0,m);
 t1 = gf(1,m);
-
-
 a = P1;
 b = P2;
 iter = 0;
-
 while any(b)
     
     iter = iter+1;
-    
     % conv requires removal of leaing zeros
     while (a(1)==0)&&(length(a)>1)
         a = a(2:length(a));
@@ -33,9 +26,7 @@ while any(b)
     while (b(1)==0)&&(length(a)>1)
         b = b(2:length(b));
     end
-    
-    
-    
+
     [q,newb] = deconv(a,b);
     temps = conv(q,s1);
     tempt = conv(q,t1);
@@ -52,14 +43,11 @@ while any(b)
     else
         newt = t0-tempt;
     end
-    
-    
+
     a = b;
     b = newb;
-    
     s0 = s1;
     s1 = news;
-    
     t0 = t1;
     t1 = newt;
     
@@ -69,14 +57,8 @@ while any(b)
         t0 = t0/a(1);
         a = a/a(1);
     end
-    
-    
-    
-    
 end
 gcd = a;
 u = s0;
 v = t0;
-
-
 end

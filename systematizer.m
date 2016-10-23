@@ -1,14 +1,13 @@
 function [H, P] = systematizer(H)
 %SYSTEMATIZER Returns systematic form of H
-%    Convert the binary parity check matrix H into systematic form.
-%    P is a permutation matrix documenting the column swaps required to obtain
-%    the systematic form. Note this is an altered version of the algorithm
-%    from Hill to be used with parity check matrices.
+%    Convert the binary parity check matrix H into systematic form. P is a
+%    permutation matrix documenting the column swaps required to obtain the
+%    systematic form.
 %
 %    Primary Reference: "A first course in coding theory" Raymond Hill
 
 [numrows,numcols] = size(H);
-P = eye(numcols); % column permutation matrix (see biswas)
+P = eye(numcols); % column permutation matrix
 
 % n-k = number of rows in H
 for j = (numcols-numrows+1):numcols
@@ -24,7 +23,6 @@ for j = (numcols-numrows+1):numcols
                 H(i,:) = H(j-(numcols-numrows),:);
                 H(j-(numcols-numrows),:) = temprow;
                 swaprow = 1;
-%                 P([j-(numcols-numrows),i],:) = P([i,j-(numcols-numrows)],:);
             end
         end
         if swaprow == 0
@@ -45,20 +43,9 @@ for j = (numcols-numrows+1):numcols
     end
     
     % step 3
-    
     checkCol = H(:,j);
     checkCol(j-(numcols-numrows)) = 0;
     checkEye = diag(checkCol);
-    H = mod(H + checkEye*repmat(H(j-(numcols-numrows),:),[numrows,1]),2);
-    
-%     for i = [1:(j-(numcols-numrows)-1),(j-(numcols-numrows)+1):numrows]
-%             if H(i,j)==1
-%             H(i,:) = H(i,:) + H(j-(numcols-numrows),:);
-%             end
-% 
-%     end
-    
-    
+    H = mod(H + checkEye*repmat(H(j-(numcols-numrows),:),[numrows,1]),2);  
 end
-
 end

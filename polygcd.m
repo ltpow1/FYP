@@ -5,7 +5,6 @@ function [gcd] = polygcd(P1,P2)
 
 a = P1;
 b = P2;
-
 while any(b)
     % conv requires removal of leaing zeros
     while(a(1)==0)
@@ -18,16 +17,12 @@ while any(b)
     if(all(a==a(1)))
         a = a/a(1);
     end
-    
     if(all(b==b(1)))
         b = b/b(1);
     end
-
     [~, remain] = deconv(a,b);
-
     a = b;
     b = remain;
 end
 gcd = a;
-
 end
